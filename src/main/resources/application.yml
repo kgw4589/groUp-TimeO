@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: grouptime
+  datasource:
+    url: jdbc:mariadb://${DATABASE_URL}/grouptimeo
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
