@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrganizationDTO {
-    private Long groupId;
+    private Long organizationId;
 
     private String name;
 

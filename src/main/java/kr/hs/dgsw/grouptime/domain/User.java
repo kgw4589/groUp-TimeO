@@ -3,6 +3,8 @@ package kr.hs.dgsw.grouptime.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Builder
@@ -21,6 +23,9 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+
+    @OneToMany(mappedBy = "user")
+    private List<Affiliation> affiliationList;
 
     public void update(String name, String email, String password) {
         this.name = name;

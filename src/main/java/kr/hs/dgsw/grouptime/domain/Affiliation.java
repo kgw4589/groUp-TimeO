@@ -20,6 +20,6 @@ public class Affiliation {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "group_id")
+    @JoinColumn(name = "organization_id")
     private Organization organization;
 }

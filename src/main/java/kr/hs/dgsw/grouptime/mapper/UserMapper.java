@@ -2,6 +2,7 @@ package kr.hs.dgsw.grouptime.mapper;
 
 import kr.hs.dgsw.grouptime.domain.User;
 import kr.hs.dgsw.grouptime.dto.UserDTO;
+import kr.hs.dgsw.grouptime.dto.UserResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

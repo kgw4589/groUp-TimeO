@@ -1,12 +1,16 @@
 package kr.hs.dgsw.grouptime.service;
 
 import kr.hs.dgsw.grouptime.domain.User;
+import kr.hs.dgsw.grouptime.dto.OrganizationDTO;
 import kr.hs.dgsw.grouptime.dto.UserDTO;
+import kr.hs.dgsw.grouptime.dto.UserResponseDTO;
+import kr.hs.dgsw.grouptime.mapper.OrganizationMapper;
 import kr.hs.dgsw.grouptime.mapper.UserMapper;
 import kr.hs.dgsw.grouptime.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -14,6 +18,7 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final OrganizationMapper organizationMapper;
 
     public Long createUser(UserDTO userDTO) {
         User user = userMapper.dtoToEntity(userDTO);
@@ -23,10 +28,20 @@ public class UserService {
         return user.getUserId();
     }
 
-    public UserDTO getUser(Long userId) {
+    public UserResponseDTO getUser(Long userId) {
         Optional<User> user = userRepository.findById(userId);
 
-        return (user.isPresent()) ? userMapper.entityToDto(user.get()) : null;
+        if (user.isPresent()) {
+            List<OrganizationDTO> userList = user
+                    .get()
+                    .getAffiliationList()
+                    .stream()
+                    .map((organization) -> organizationMapper.entityToDto(organization.getOrganization()))
+                    .toList();
+
+            return new UserResponseDTO(userMapper.entityToDto(user.get()), userList);
+        }
+        return null;
     }
 
     public void modify(UserDTO userDTO) {
