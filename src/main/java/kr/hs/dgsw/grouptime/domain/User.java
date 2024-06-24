@@ -21,4 +21,10 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+
+    public void update(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
 }
