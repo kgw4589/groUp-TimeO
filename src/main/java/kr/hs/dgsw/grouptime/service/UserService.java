@@ -57,7 +57,7 @@ public class UserService {
     }
 
     public void modify(UserDTO userDTO) {
-        Optional<User> user = userRepository.findById(userDTO.getUserid());
+        Optional<User> user = userRepository.findById(userDTO.getUserId());
 
         if (user.isPresent()) {
             User userEntity = user.get();
