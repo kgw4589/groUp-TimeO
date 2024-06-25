@@ -7,21 +7,21 @@ import kr.hs.dgsw.grouptime.dto.CreateOrganizationDTO;
 import kr.hs.dgsw.grouptime.dto.OrganizationDTO;
 import kr.hs.dgsw.grouptime.dto.OrganizationResponseDTO;
 import kr.hs.dgsw.grouptime.dto.UserDTO;
-import kr.hs.dgsw.grouptime.mapper.AffiliationMapper;
+import kr.hs.dgsw.grouptime.handler.exception.GlobalException;
 import kr.hs.dgsw.grouptime.mapper.OrganizationMapper;
 import kr.hs.dgsw.grouptime.mapper.UserMapper;
 import kr.hs.dgsw.grouptime.repository.AffiliationRepository;
 import kr.hs.dgsw.grouptime.repository.OrganizationRepository;
 import kr.hs.dgsw.grouptime.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrganizationService {
     private final OrganizationRepository organizationRepository;
     private final UserRepository userRepository;
@@ -30,60 +30,49 @@ public class OrganizationService {
     private final UserMapper userMapper;
 
     public Long createOrganization(CreateOrganizationDTO createOrganizationDTO) {
-        Optional<User> user = userRepository.findById(createOrganizationDTO.getUserId());
+        User user = userRepository.findById(createOrganizationDTO.getUserId()).orElseThrow(GlobalException::userNotFound);
 
-        if (user.isPresent()) {
-            Organization organization = organizationMapper.dtoToEntity(createOrganizationDTO.getOrganization());
+        Organization organization = organizationMapper.dtoToEntity(createOrganizationDTO.getOrganization());
 
-            organizationRepository.save(organization);
+        organizationRepository.save(organization);
 
-            Affiliation affiliation = Affiliation.builder()
-                    .user(user.get())
-                    .organization(organization)
-                    .build();
+        Affiliation affiliation = Affiliation.builder()
+                .user(user)
+                .organization(organization)
+                .build();
 
-            affiliationRepository.save(affiliation);
+        affiliationRepository.save(affiliation);
 
-            return organization.getOrganizationId();
-        }
-
-        return null;
+        return organization.getOrganizationId();
     }
 
     public OrganizationResponseDTO getOrganization(Long organizationId) {
-        Optional<Organization> organization = organizationRepository.findById(organizationId);
+        Organization organization = organizationRepository.findById(organizationId).orElseThrow(GlobalException::organizationNotFound);
 
-        if (organization.isPresent()) {
-            Organization organizationEntity = organization.get();
+        List<UserDTO> userList = organization
+                .getAffiliationList()
+                .stream()
+                .map((user)->userMapper.entityToDto(user.getUser()))
+                .toList();
 
-            List<UserDTO> userList = organizationEntity
-                    .getAffiliationList()
-                    .stream()
-                    .map((user)->userMapper.entityToDto(user.getUser()))
-                    .toList();
-
-            return new OrganizationResponseDTO(organizationMapper.entityToDto(organizationEntity), userList);
-        }
-        return null;
+        return new OrganizationResponseDTO(organizationMapper.entityToDto(organization), userList);
     }
 
     public void update(OrganizationDTO organizationDTO) {
-        Optional<Organization> organization = organizationRepository.findById(organizationDTO.getOrganizationId());
+        Organization organization = organizationRepository
+                .findById(organizationDTO.getOrganizationId())
+                .orElseThrow(GlobalException::organizationNotFound);
 
-        if (organization.isPresent()) {
-            Organization organizationEntity = organization.get();
+        organization.update(organizationDTO.getName(), organizationDTO.getEmail());
 
-            organizationEntity.update(organizationEntity.getName(), organizationEntity.getEmail());
-
-            organizationRepository.save(organizationEntity);
-        }
+        organizationRepository.save(organization);
     }
 
     public void delete(Long organizationId) {
-        Optional<Organization> organization = organizationRepository.findById(organizationId);
+        Organization organization = organizationRepository
+                .findById(organizationId)
+                .orElseThrow(GlobalException::organizationNotFound);
 
-        if (organization.isPresent()) {
-            organizationRepository.delete(organization.get());
-        }
+        organizationRepository.delete(organization);
     }
 }
