@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class OrganizationMapper {
     public OrganizationDTO entityToDto(Organization organization) {
         return OrganizationDTO.builder()
-                .groupId(organization.getGroupId())
+                .organizationId(organization.getOrganizationId())
                 .name(organization.getName())
                 .email(organization.getEmail())
                 .build();
@@ -17,7 +17,7 @@ public class OrganizationMapper {
     public Organization dtoToEntity(OrganizationDTO organizationDTO) {
         return Organization.builder()
                 .email(organizationDTO.getEmail())
-                .groupId(organizationDTO.getGroupId())
+                .organizationId(organizationDTO.getOrganizationId())
                 .name(organizationDTO.getName())
                 .build();
     }
