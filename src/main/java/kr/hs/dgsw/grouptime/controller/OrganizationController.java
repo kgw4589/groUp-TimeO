@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/organization")
 public class OrganizationController {
     private final OrganizationService organizationService;
     private final AffiliationService affiliationService;

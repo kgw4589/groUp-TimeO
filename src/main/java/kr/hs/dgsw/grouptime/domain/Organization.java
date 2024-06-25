@@ -1,8 +1,6 @@
 package kr.hs.dgsw.grouptime.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
@@ -14,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Organization extends BaseEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long organizationId;
 
     private String name;
