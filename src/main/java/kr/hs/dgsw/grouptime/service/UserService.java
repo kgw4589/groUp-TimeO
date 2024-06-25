@@ -1,6 +1,7 @@
 package kr.hs.dgsw.grouptime.service;
 
 import kr.hs.dgsw.grouptime.domain.User;
+import kr.hs.dgsw.grouptime.dto.LoginDTO;
 import kr.hs.dgsw.grouptime.dto.OrganizationDTO;
 import kr.hs.dgsw.grouptime.dto.UserDTO;
 import kr.hs.dgsw.grouptime.dto.UserResponseDTO;
@@ -26,6 +27,17 @@ public class UserService {
         userRepository.save(user);
 
         return user.getUserId();
+    }
+
+    public Long login(LoginDTO loginDTO) {
+        Optional<User> user = userRepository.findByEmail(loginDTO.getEmail());
+
+        if (user.isPresent()) {
+            if (user.get().getPassword().equals(loginDTO.getPassword())) {
+                return user.get().getUserId();
+            }
+        }
+        return null;
     }
 
     public UserResponseDTO getUser(Long userId) {

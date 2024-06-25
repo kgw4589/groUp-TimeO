@@ -2,6 +2,7 @@ package kr.hs.dgsw.grouptime.controller;
 
 import kr.hs.dgsw.grouptime.domain.User;
 import kr.hs.dgsw.grouptime.dto.BaseResponse;
+import kr.hs.dgsw.grouptime.dto.LoginDTO;
 import kr.hs.dgsw.grouptime.dto.UserDTO;
 import kr.hs.dgsw.grouptime.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,11 @@ public class UserController {
     @GetMapping("/{userId}")
     public BaseResponse<UserDTO> get(@PathVariable Long userId) {
         return new BaseResponse(200, "유저 조회 성공", userService.getUser(userId));
+    }
+
+    @PostMapping("/login")
+    public BaseResponse<Long> login(@RequestBody LoginDTO loginDTO) {
+        return new BaseResponse(200, "로그인 성공", userService.login(loginDTO));
     }
 
     @PostMapping
