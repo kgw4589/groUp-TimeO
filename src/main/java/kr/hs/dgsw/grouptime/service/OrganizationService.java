@@ -73,6 +73,8 @@ public class OrganizationService {
                 .findById(organizationId)
                 .orElseThrow(GlobalException::organizationNotFound);
 
+        affiliationRepository.deleteAll(organization.getAffiliationList());
+
         organizationRepository.delete(organization);
     }
 }
