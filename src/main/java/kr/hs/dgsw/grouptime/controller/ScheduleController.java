@@ -1,5 +1,6 @@
 package kr.hs.dgsw.grouptime.controller;
 
+import jakarta.persistence.Id;
 import kr.hs.dgsw.grouptime.dto.BaseResponse;
 import kr.hs.dgsw.grouptime.dto.CommentDTO;
 import kr.hs.dgsw.grouptime.dto.ScheduleDTO;
@@ -17,6 +18,26 @@ public class ScheduleController {
     public BaseResponse<ScheduleDTO> getSchedule(@PathVariable Long scheduleId) {
         return new BaseResponse<>(200, "일정 조회 성공", scheduleService.getSchedule(scheduleId));
     }
+
+    @PostMapping
+    public BaseResponse<String> postSchedule(@RequestBody ScheduleDTO scheduleDTO){
+        return new BaseResponse<String>(200, "일정 생성 완료", scheduleService.createSchedule(scheduleDTO));
+    }
+
+    @PostMapping
+    public BaseResponse<String> updateSchedule(@RequestBody ScheduleDTO scheduleDTO){
+        return new BaseResponse<String>(200, "일정 수정 완료", scheduleService.modifySchedule(scheduleDTO));
+    }
+
+    @DeleteMapping("/{scheduleId}")
+    public BaseResponse<String> deleteSchedule(@PathVariable Long scheduleId){
+        return new BaseResponse<>(200, "삭제완료", scheduleService.delete(scheduleId));
+    }
+
+    //일정 조회
+    //일정 생성
+    //일정 삭제
+    //일정 추가
 
     @PostMapping("/{scheduleId}/comments")
     public BaseResponse<CommentDTO> addCommentToSchedule(@PathVariable Long scheduleId, @RequestBody CommentDTO commentDTO) {
