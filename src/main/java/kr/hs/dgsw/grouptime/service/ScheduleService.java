@@ -4,6 +4,7 @@ import kr.hs.dgsw.grouptime.domain.*;
 import kr.hs.dgsw.grouptime.dto.CommentDTO;
 import kr.hs.dgsw.grouptime.dto.LoginDTO;
 import kr.hs.dgsw.grouptime.dto.ScheduleDTO;
+import kr.hs.dgsw.grouptime.handler.exception.GlobalException;
 import kr.hs.dgsw.grouptime.mapper.ScheduleMapper;
 import kr.hs.dgsw.grouptime.repository.CommentRepository;
 import kr.hs.dgsw.grouptime.repository.ScheduleRepository;
@@ -22,62 +23,59 @@ public class ScheduleService {
 
 
     public ScheduleDTO getSchedule(Long id) {
-        Schedule schedule = scheduleRepository.findById(id).orElseThrow();
+        Schedule schedule = scheduleRepository.findById(id).orElseThrow(GlobalException::scheduleNotFound);
         return scheduleMapper.entityToDto(schedule);
     }
 
 
 
-    public String createSchedule(ScheduleDTO scheduleDTO) {
-         Schedule scheduleData =  scheduleMapper.dtoToEntity(scheduleDTO);
-         scheduleRepository.save(scheduleData);
-         return "생성성공";
+    public Long createSchedule(ScheduleDTO scheduleDTO) {
+         Schedule schedule =  scheduleMapper.dtoToEntity(scheduleDTO);
+         scheduleRepository.save(schedule);
+         return schedule.getScheduleId();
     }
 
-    public String modifySchedule(ScheduleDTO scheduleDTO){
-        Optional<Schedule> scheduleData =  scheduleRepository.findById(scheduleDTO.getScheduleId());
-        if (scheduleData.isPresent()){
-            Schedule scheduleEntity = scheduleData.get();
-            scheduleEntity.update(
-                    scheduleDTO.getTitle(),
-                    scheduleDTO.getDescription(),
-                    scheduleDTO.getLocation(),
-                    scheduleDTO.getCategory(),
-                    scheduleDTO.getDate(),
-                    scheduleDTO.getComments()
-            );
+    public void modifySchedule(ScheduleDTO scheduleDTO){
+        Schedule schedule =  scheduleRepository
+                .findById(scheduleDTO.getScheduleId())
+                .orElseThrow(GlobalException::scheduleNotFound);
 
-            scheduleRepository.save(scheduleEntity);
-        }
-        return "일정 수정 완료";
+        schedule.update(
+            scheduleDTO.getTitle(),
+            scheduleDTO.getDescription(),
+            scheduleDTO.getLocation(),
+            scheduleDTO.getCategory(),
+            scheduleDTO.getDate(),
+            scheduleDTO.getComments()
+        );
+
+        scheduleRepository.save(schedule);
     }
 
-    public String delete(Long scheduleId){
-        Optional<Schedule> scheduleData =  scheduleRepository.findById(scheduleId);
-        if (scheduleData.isPresent()){
-            scheduleRepository.delete(scheduleData.get());
-        }
-        return "삭제 완료";
+    public void delete(Long scheduleId){
+        Schedule schedule =  scheduleRepository
+                .findById(scheduleId)
+                .orElseThrow(GlobalException::scheduleNotFound);
+
+        scheduleRepository.delete(schedule);
     }
 
 
 
 
 
-    public CommentDTO addCommentToSchedule(Long scheduleId, CommentDTO commentDTO) {
-        Optional<Schedule> scheduleOpt = scheduleRepository.findById(scheduleId);
-        if (scheduleOpt.isPresent()) {
-            Schedule schedule = scheduleOpt.get();
-            Comment comment = Comment.builder()
-                    .text(commentDTO.getText())
-                    .schedule(schedule)
-                    .build();
-            commentRepository.save(comment);
+    public Long addCommentToSchedule(Long scheduleId, CommentDTO commentDTO) {
+        Schedule schedule = scheduleRepository
+                .findById(scheduleId)
+                .orElseThrow(GlobalException::scheduleNotFound);
 
-            commentDTO.setCommentId(comment.getCommentId());
-            commentDTO.setScheduleId(schedule.getScheduleId());
-            return commentDTO;
-        }
-        return null;
+        Comment comment = Comment.builder()
+                .text(commentDTO.getText())
+                .schedule(schedule)
+                .build();
+
+        commentRepository.save(comment);
+
+        return comment.getCommentId();
     }
 }

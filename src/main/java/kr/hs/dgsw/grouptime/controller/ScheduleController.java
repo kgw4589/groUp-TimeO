@@ -16,22 +16,24 @@ public class ScheduleController {
 
     @GetMapping("/{scheduleId}")
     public BaseResponse<ScheduleDTO> getSchedule(@PathVariable Long scheduleId) {
-        return new BaseResponse<>(200, "일정 조회 성공", scheduleService.getSchedule(scheduleId));
+        return new BaseResponse(200, "일정 조회 성공", scheduleService.getSchedule(scheduleId));
     }
 
     @PostMapping
     public BaseResponse<String> postSchedule(@RequestBody ScheduleDTO scheduleDTO){
-        return new BaseResponse<String>(200, "일정 생성 완료", scheduleService.createSchedule(scheduleDTO));
+        return new BaseResponse(200, "일정 생성 완료", scheduleService.createSchedule(scheduleDTO));
     }
 
     @PostMapping
     public BaseResponse<String> updateSchedule(@RequestBody ScheduleDTO scheduleDTO){
-        return new BaseResponse<String>(200, "일정 수정 완료", scheduleService.modifySchedule(scheduleDTO));
+        scheduleService.modifySchedule(scheduleDTO);
+        return new BaseResponse(200, "일정 수정 완료");
     }
 
     @DeleteMapping("/{scheduleId}")
     public BaseResponse<String> deleteSchedule(@PathVariable Long scheduleId){
-        return new BaseResponse<>(200, "삭제완료", scheduleService.delete(scheduleId));
+        scheduleService.delete(scheduleId);
+        return new BaseResponse(200, "삭제완료");
     }
 
     //일정 조회
@@ -40,7 +42,7 @@ public class ScheduleController {
     //일정 추가
 
     @PostMapping("/{scheduleId}/comments")
-    public BaseResponse<CommentDTO> addCommentToSchedule(@PathVariable Long scheduleId, @RequestBody CommentDTO commentDTO) {
-        return new BaseResponse<>(200, "코멘트 추가 성공", scheduleService.addCommentToSchedule(scheduleId, commentDTO));
+    public BaseResponse<Long> addCommentToSchedule(@PathVariable Long scheduleId, @RequestBody CommentDTO commentDTO) {
+        return new BaseResponse(200, "코멘트 추가 성공", scheduleService.addCommentToSchedule(scheduleId, commentDTO));
     }
 }
