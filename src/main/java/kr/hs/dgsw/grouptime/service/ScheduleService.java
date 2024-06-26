@@ -141,4 +141,12 @@ public class ScheduleService {
 
         return comment.getCommentId();
     }
+
+    public void deleteComment(Long scheduleId, Long commentId) {
+        Schedule schedule = scheduleRepository
+                .findById(scheduleId)
+                .orElseThrow(GlobalException::scheduleNotFound);
+
+        commentRepository.findByCommentIdAndSchedule(commentId, schedule);
+    }
 }

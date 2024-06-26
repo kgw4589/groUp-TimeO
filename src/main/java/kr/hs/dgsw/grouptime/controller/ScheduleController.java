@@ -57,8 +57,14 @@ public class ScheduleController {
     //일정 삭제
     //일정 추가
 
-    @PostMapping("/{scheduleId}/comments")
+    @PostMapping("/{scheduleId}/comment")
     public BaseResponse<Long> addCommentToSchedule(@PathVariable Long scheduleId, @RequestBody CommentDTO commentDTO) {
         return new BaseResponse(200, "코멘트 추가 성공", scheduleService.addCommentToSchedule(scheduleId, commentDTO));
+    }
+
+    @DeleteMapping("/{scheduleId}/comment/{commentId}")
+    public BaseResponse<Void> deleteComment(@PathVariable Long scheduleId, @PathVariable Long commentId) {
+        scheduleService.delete(scheduleId);
+        return new BaseResponse(200, "코멘트 삭제 성공");
     }
 }

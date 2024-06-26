@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 public class CommentDTO {
     private Long commentId;
     private String text;
-    private Schedule schedule;
     private LocalDateTime regDate;
     private LocalDateTime modDate;
 }
