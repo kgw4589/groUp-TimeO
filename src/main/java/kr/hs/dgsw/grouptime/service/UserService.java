@@ -10,6 +10,7 @@ import kr.hs.dgsw.grouptime.mapper.OrganizationMapper;
 import kr.hs.dgsw.grouptime.mapper.UserMapper;
 import kr.hs.dgsw.grouptime.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.NonUniqueResultException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +23,9 @@ public class UserService {
     private final OrganizationMapper organizationMapper;
 
     public Long createUser(UserDTO userDTO) {
+        if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
+            throw new NonUniqueResultException(2);
+        }
         User user = userMapper.dtoToEntity(userDTO);
 
         userRepository.save(user);
