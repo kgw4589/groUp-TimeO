@@ -45,6 +45,7 @@ public class ScheduleMapper {
                 .category(schedule.getCategory())
                 .comments(commentList)
                 .entryList(userList)
+                .scheduleId(schedule.getScheduleId())
                 .build();
     }
 
