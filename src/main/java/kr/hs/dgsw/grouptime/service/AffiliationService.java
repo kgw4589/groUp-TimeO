@@ -8,6 +8,7 @@ import kr.hs.dgsw.grouptime.repository.AffiliationRepository;
 import kr.hs.dgsw.grouptime.repository.OrganizationRepository;
 import kr.hs.dgsw.grouptime.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.NonUniqueResultException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -27,6 +28,10 @@ public class AffiliationService {
                 .findById(organizationId)
                 .orElseThrow(GlobalException::organizationNotFound);
 
+        if (affiliationRepository.findByUserAndOrganization(user, organization).isPresent()) {
+            throw new NonUniqueResultException(2);
+        }
+
         Affiliation affiliation = Affiliation.builder()
                 .organization(organization)
                 .user(user)
@@ -35,11 +40,19 @@ public class AffiliationService {
         affiliationRepository.save(affiliation);
     }
 
-    public void delete(Long affiliationId) {
-        Optional<Affiliation> affiliation = affiliationRepository.findById(affiliationId);
+    public void delete(Long userId, Long organizationId) {
+        User user = userRepository
+                .findById(userId)
+                .orElseThrow(GlobalException::userNotFound);
 
-        if (affiliation.isPresent()) {
-            affiliationRepository.delete(affiliation.get());
-        }
+        Organization organization = organizationRepository
+                .findById(organizationId)
+                .orElseThrow(GlobalException::organizationNotFound);
+
+        Affiliation affiliation = affiliationRepository
+                .findByUserAndOrganization(user, organization)
+                .orElseThrow(GlobalException::affiliationNotFound);
+
+        affiliationRepository.delete(affiliation);
     }
 }
