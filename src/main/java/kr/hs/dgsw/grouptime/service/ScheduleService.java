@@ -147,6 +147,10 @@ public class ScheduleService {
                 .findById(scheduleId)
                 .orElseThrow(GlobalException::scheduleNotFound);
 
-        commentRepository.findByCommentIdAndSchedule(commentId, schedule);
+        Comment comment = commentRepository
+                .findByCommentIdAndSchedule(commentId, schedule)
+                .orElseThrow(GlobalException::commentNotFound);
+
+        commentRepository.delete(comment);
     }
 }

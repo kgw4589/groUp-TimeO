@@ -64,7 +64,7 @@ public class ScheduleController {
 
     @DeleteMapping("/{scheduleId}/comment/{commentId}")
     public BaseResponse<Void> deleteComment(@PathVariable Long scheduleId, @PathVariable Long commentId) {
-        scheduleService.delete(scheduleId);
+        scheduleService.deleteComment(scheduleId, commentId);
         return new BaseResponse(200, "코멘트 삭제 성공");
     }
 }

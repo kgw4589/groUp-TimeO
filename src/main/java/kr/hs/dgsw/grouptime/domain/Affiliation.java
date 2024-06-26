@@ -13,11 +13,11 @@ public class Affiliation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long affId;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "organization_id")
     private Organization organization;
 }

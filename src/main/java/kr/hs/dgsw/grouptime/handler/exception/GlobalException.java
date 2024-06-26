@@ -9,6 +9,7 @@ public class GlobalException extends BusinessException {
     private static final GlobalException SCHEDULE_NOT_FOUND = new GlobalException(ErrorCode.SCHEDULE_NOT_FOUND);
     private static final GlobalException BAD_REQUEST_QUERIES = new GlobalException(ErrorCode.BAD_REQUEST_QUERIES);
     private static final GlobalException ENTRY_NOT_FOUND = new GlobalException(ErrorCode.ENTRY_NOT_FOUND);
+    private static final GlobalException COMMENT_NOT_FOUND = new GlobalException(ErrorCode.COMMENT_NOT_FOUND);
 
     public GlobalException(ErrorCode errorCode) {
         super(errorCode);
@@ -25,4 +26,6 @@ public class GlobalException extends BusinessException {
     public static GlobalException badRequestQueries() { return BAD_REQUEST_QUERIES; }
 
     public static GlobalException entryNotFound() { return ENTRY_NOT_FOUND; }
+
+    public static GlobalException commentNotFound() { return COMMENT_NOT_FOUND; }
 }

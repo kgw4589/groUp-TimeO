@@ -46,7 +46,7 @@ public class OrganizationController {
 
     @DeleteMapping("/affiliation/{affiliationId}")
     public BaseResponse<Void> deleteAffiliation(@PathVariable Long affiliationId) {
-        organizationService.delete(affiliationId);
+        affiliationService.delete(affiliationId);
         return new BaseResponse(200, "단체 소속 삭제 완료");
     }
 }

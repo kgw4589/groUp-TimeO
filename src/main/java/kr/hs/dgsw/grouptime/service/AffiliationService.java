@@ -3,6 +3,7 @@ package kr.hs.dgsw.grouptime.service;
 import kr.hs.dgsw.grouptime.domain.Affiliation;
 import kr.hs.dgsw.grouptime.domain.Organization;
 import kr.hs.dgsw.grouptime.domain.User;
+import kr.hs.dgsw.grouptime.handler.exception.GlobalException;
 import kr.hs.dgsw.grouptime.repository.AffiliationRepository;
 import kr.hs.dgsw.grouptime.repository.OrganizationRepository;
 import kr.hs.dgsw.grouptime.repository.UserRepository;
@@ -19,17 +20,19 @@ public class AffiliationService {
     private final OrganizationRepository organizationRepository;
 
     public void createAffiliation(Long userId, Long organizationId) {
-        Optional<User> user = userRepository.findById(userId);
-        Optional<Organization> organization = organizationRepository.findById(organizationId);
+        User user = userRepository
+                .findById(userId)
+                .orElseThrow(GlobalException::userNotFound);
+        Organization organization = organizationRepository
+                .findById(organizationId)
+                .orElseThrow(GlobalException::organizationNotFound);
 
-        if (user.isPresent() && organization.isPresent()) {
-            Affiliation affiliation = Affiliation.builder()
-                    .organization(organization.get())
-                    .user(user.get())
-                    .build();
+        Affiliation affiliation = Affiliation.builder()
+                .organization(organization)
+                .user(user)
+                .build();
 
-            affiliationRepository.save(affiliation);
-        }
+        affiliationRepository.save(affiliation);
     }
 
     public void delete(Long affiliationId) {

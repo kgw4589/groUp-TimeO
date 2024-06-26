@@ -40,7 +40,7 @@ public class Schedule {
     @OneToMany(mappedBy = "schedule")
     private List<Entry> entryList;
 
-    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "schedule")
     private List<Comment> comments;
 
     public void update(String title, String description, String location, String category, LocalDate date) {
