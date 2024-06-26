@@ -27,6 +27,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Affiliation> affiliationList;
 
+    @OneToMany(mappedBy = "user")
+    private List<Entry> entryList;
+
     public void update(String name, String email, String password) {
         this.name = name;
         this.email = email;

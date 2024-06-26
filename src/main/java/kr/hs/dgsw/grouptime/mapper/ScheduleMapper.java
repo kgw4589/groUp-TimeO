@@ -1,8 +1,12 @@
 package kr.hs.dgsw.grouptime.mapper;
 
+import kr.hs.dgsw.grouptime.domain.Organization;
 import kr.hs.dgsw.grouptime.domain.Schedule;
+import kr.hs.dgsw.grouptime.dto.CommentDTO;
 import kr.hs.dgsw.grouptime.dto.ScheduleDTO;
 import kr.hs.dgsw.grouptime.dto.UserDTO;
+import kr.hs.dgsw.grouptime.handler.exception.GlobalException;
+import kr.hs.dgsw.grouptime.repository.OrganizationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +16,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ScheduleMapper {
     private final UserMapper userMapper;
+    private final CommentMapper commentMapper;
+    private final OrganizationRepository organizationRepository;
 
     public ScheduleDTO entityToDto(Schedule schedule) {
         List<UserDTO> userList = schedule
@@ -22,6 +28,14 @@ public class ScheduleMapper {
                 })
                 .toList();
 
+        List<CommentDTO> commentList = schedule
+                .getComments()
+                .stream()
+                .map(comment -> {
+                    return commentMapper.entityToDto(comment);
+                })
+                .toList();
+
         return ScheduleDTO.builder()
                 .scheduleId(schedule.getScheduleId())
                 .title(schedule.getTitle())
@@ -29,19 +43,21 @@ public class ScheduleMapper {
                 .location(schedule.getLocation())
                 .date(schedule.getDate())
                 .category(schedule.getCategory())
-                .comments(schedule.getComments())
+                .comments(commentList)
                 .entryList(userList)
                 .build();
     }
 
     public Schedule dtoToEntity(ScheduleDTO scheduleDTO) {
+        Organization organization = organizationRepository.findById(scheduleDTO.getOrganizationId()).orElseThrow(GlobalException::scheduleNotFound);
         return Schedule.builder()
                 .scheduleId(scheduleDTO.getScheduleId())
                 .title(scheduleDTO.getTitle())
                 .description(scheduleDTO.getDescription())
                 .location(scheduleDTO.getLocation())
                 .date(scheduleDTO.getDate())
-                .comments(scheduleDTO.getComments())
+                .organization(organization)
+                .category(scheduleDTO.getCategory())
                 .build();
     }
 }

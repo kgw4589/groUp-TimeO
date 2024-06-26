@@ -18,6 +18,7 @@ public class ScheduleDTO {
     private String location;
     private LocalDate date;
     private String category;
+    private Long organizationId;
     private List<UserDTO> entryList;
-    private List<Comment> comments;
+    private List<CommentDTO> comments;
 }

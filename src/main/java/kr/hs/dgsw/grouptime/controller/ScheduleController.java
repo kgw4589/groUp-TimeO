@@ -8,6 +8,8 @@ import kr.hs.dgsw.grouptime.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/schedule")
@@ -19,12 +21,26 @@ public class ScheduleController {
         return new BaseResponse(200, "일정 조회 성공", scheduleService.getSchedule(scheduleId));
     }
 
+    @GetMapping("/list")
+    public BaseResponse<List<ScheduleDTO>> getScheduleList(
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String location,
+            @RequestParam(required = false) Long organizationId,
+            @RequestParam(required = false) Long userId
+    ) {
+        return new BaseResponse(
+            200,
+            "일정 리스트 조회 성공",
+            scheduleService.getScheduleList(category, location, organizationId, userId)
+        );
+    }
+
     @PostMapping
     public BaseResponse<String> postSchedule(@RequestBody ScheduleDTO scheduleDTO){
         return new BaseResponse(200, "일정 생성 완료", scheduleService.createSchedule(scheduleDTO));
     }
 
-    @PostMapping
+    @PutMapping
     public BaseResponse<String> updateSchedule(@RequestBody ScheduleDTO scheduleDTO){
         scheduleService.modifySchedule(scheduleDTO);
         return new BaseResponse(200, "일정 수정 완료");

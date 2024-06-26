@@ -1,6 +1,9 @@
 package kr.hs.dgsw.grouptime.dto;
 
+import kr.hs.dgsw.grouptime.domain.Schedule;
 import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Builder
 @NoArgsConstructor
@@ -10,5 +13,7 @@ import lombok.*;
 public class CommentDTO {
     private Long commentId;
     private String text;
-    private Long scheduleId;
+    private Schedule schedule;
+    private LocalDateTime regDate;
+    private LocalDateTime modDate;
 }

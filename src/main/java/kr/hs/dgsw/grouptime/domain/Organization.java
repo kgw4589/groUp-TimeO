@@ -22,6 +22,9 @@ public class Organization extends BaseEntity {
     @OneToMany(mappedBy = "organization")
     private List<Affiliation> affiliationList;
 
+    @OneToMany(mappedBy = "organization")
+    private List<Schedule> scheduleList;
+
     public void update(String name, String email) {
         this.name = name;
         this.email = email;

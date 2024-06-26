@@ -33,18 +33,21 @@ public class Schedule {
     @Column(nullable = false)
     private LocalDate date;
 
+    @ManyToOne
+    @JoinColumn(name = "organization_id")
+    private Organization organization;
+
     @OneToMany(mappedBy = "schedule")
     private List<Entry> entryList;
 
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
-    public void update(String title, String description, String location, String category, LocalDate date, List<Comment> comments) {
+    public void update(String title, String description, String location, String category, LocalDate date) {
         this.title = title;
         this.description = description;
         this.location = location;
         this.category = category;
         this.date = date;
-        this.comments = comments;
     }
 }

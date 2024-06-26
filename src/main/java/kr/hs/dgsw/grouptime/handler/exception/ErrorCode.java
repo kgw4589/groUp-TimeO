@@ -7,10 +7,12 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorCode {
     INTERNAL_SERVER_ERROR(500, "서버 에러"),
-    USER_NOT_FOUNT(404, "유저를 찾을 수 없음"),
-    ORGANIZATION_NOT_FOUNT(404, "단체를 찾을 수 없음"),
-    SCHEDULE_NOT_FOUNT(404, "일정을 찾을 수 없음"),
-    PASSWORD_IS_NOT_EQUAL(400, "비밀번호가 다름")
+    USER_NOT_FOUND(404, "유저를 찾을 수 없음"),
+    ORGANIZATION_NOT_FOUND(404, "단체를 찾을 수 없음"),
+    SCHEDULE_NOT_FOUND(404, "일정을 찾을 수 없음"),
+    ENTRY_NOT_FOUND(404, "참가된 일정을 찾을 수 없음"),
+    PASSWORD_IS_NOT_EQUAL(400, "비밀번호가 다름"),
+    BAD_REQUEST_QUERIES(400, "쿼리가 잘못됨")
     ;
 
     private final Integer code;
