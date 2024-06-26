@@ -18,15 +18,12 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final OrganizationRepository organizationRepository;
     private final ScheduleMapper scheduleMapper;
-    private final EntryRepository entryRepository;
-
 
     public ScheduleDTO getSchedule(Long id) {
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(GlobalException::scheduleNotFound);
@@ -80,12 +77,12 @@ public class ScheduleService {
         }
 
         scheduleList.forEach(schedule -> {
-            if (category == null && category == null) {
+            if (category == null && location == null) {
                 response.add(schedule);
             } else if (location == null) {
-                if (schedule.getCategory().equals(category)) response.add(schedule);
+                if (schedule.getCategory().contains(category)) { response.add(schedule); }
             } else if (category == null) {
-                if (schedule.getLocation().equals(location)) response.add(schedule);
+                if (schedule.getLocation().contains(location)) { response.add(schedule); }
             } else {
                 if (schedule.getCategory().equals(category) && schedule.getLocation().equals(location)) response.add(schedule);
             }
