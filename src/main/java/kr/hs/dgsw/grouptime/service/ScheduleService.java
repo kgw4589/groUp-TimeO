@@ -80,12 +80,12 @@ public class ScheduleService {
         }
 
         scheduleList.forEach(schedule -> {
-            if (category == null) {
-                if (schedule.getLocation().equals(location)) response.add(schedule);
+            if (category == null && category == null) {
+                response.add(schedule);
             } else if (location == null) {
                 if (schedule.getCategory().equals(category)) response.add(schedule);
-            } else if (category != null && location != null) {
-                response.add(schedule);
+            } else if (category == null) {
+                if (schedule.getLocation().equals(location)) response.add(schedule);
             } else {
                 if (schedule.getCategory().equals(category) && schedule.getLocation().equals(location)) response.add(schedule);
             }
